@@ -52,6 +52,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Services\FileService.cs" />
+    <Compile Include="Services\IFileService.cs" />
     <Compile Include="Services\IXmlService.cs" />
     <Compile Include="Services\XmlService.cs" />
     <Page Include="MainWindow.xaml">
