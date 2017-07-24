@@ -10,6 +10,15 @@ namespace SqlServerInstancesHelper.Services {
         public FileService() {
         }
 
+        public bool DeleteFile(string v) {
+            if (File.Exists(v)) {
+                File.Delete(v);
+                return true;
+            }
+
+            return false;
+        }
+
         public bool CheckFile(string v) {
             throw new NotImplementedException();
         }
@@ -17,10 +26,11 @@ namespace SqlServerInstancesHelper.Services {
         public string CreateFile(string file) {
 
             if (!File.Exists(file)) {
-
-                using (var fileStream = File.Create(file)) {
-                    return fileStream.Name;
-                }
+                var fileStream = File.Create(file);
+                return fileStream.Name;
+                //using (var fileStream = File.Create(file)) {
+                //    return fileStream.Name;
+                //}
             }
 
             return "";
@@ -29,9 +39,8 @@ namespace SqlServerInstancesHelper.Services {
         public string GetFile(string file) {
 
             if (File.Exists(file)) {
-                using (var fileStream = File.OpenRead(file)) {
+                using (var fileStream = File.OpenRead(file))
                     return fileStream.Name;
-                }
 
             }
 

@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SqlServerInstancesHelper.Services;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -75,7 +76,37 @@ namespace SqlServerInstancesHelper.Tests.AccountManagerTests {
             //ASSERT
             Assert.AreEqual("accounts.xml", mockXmlService.ExistingXmlFile);
 
+        }
 
+        [Test]
+        public void LoadXmlFile_IfFileIsUsed_ShouldThrowIOException() {
+            //ARRANGE
+            IFileService stubFileService = Substitute.For<IFileService>();
+            var mockXmlService = new FakeXmlService(stubFileService);
+            stubFileService.CheckFile(Arg.Any<string>()).Returns(true);
+            //stubFileService.GetFile(Arg.Any<string>()).Returns("accounts.xml");
+            stubFileService.GetFile(Arg.Any<string>()).Returns(x => throw new IOException());
+
+
+            //ACT
+            var ex = Assert.Throws<IOException>(() => mockXmlService.LoadXmlFile());
+
+            //ASSERT
+            //Assert.AreEqual("accounts.xml", mockXmlService.ExistingXmlFile);
+            Assert.AreEqual("file is being used", ex.Message);
+        }
+
+
+
+        [Test]
+        public void GetStringLists_Should_GetListOfStrings() {
+
+            IXmlService stubXmlService = Substitute.For<IXmlService>();
+            stubXmlService.GetStringLists(Arg.Any<string>()).Returns(new List<string>() { "test1", "test2" });
+
+
+            string result = stubXmlService.GetStringLists(Arg.Any<string>())[0];
+            Assert.AreEqual("test1", result);
         }
 
 

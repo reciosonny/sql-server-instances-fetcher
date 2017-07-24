@@ -29,7 +29,7 @@ namespace SqlServerInstancesHelper.Managers {
         }
 
         public List<string> GetUsernames() {
-            return xmlService.GetUsernames();
+            return xmlService.GetStringLists("");
         }
 
         public void SaveAccountSettings(string username, string password) {

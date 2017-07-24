@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using NSubstitute;
+using NUnit.Framework;
 using SqlServerInstancesHelper.Managers;
 using SqlServerInstancesHelper.Services;
 using System;
@@ -12,9 +13,11 @@ namespace SqlServerInstancesHelper.Tests.AccountManagerTests {
 
         [Test]
         public void AccountManager_GetUsernames_Should_FetchUsernames() {
-            var stubXmlService = new FakeXmlService();
-            stubXmlService.Usernames = new List<string>() { "test1", "test2" };
-
+            var stubXmlService = Substitute.For<IXmlService>();
+            stubXmlService
+                    .GetStringLists(Arg.Any<string>())
+                    .Returns(new List<string>() { "test1", "test2" });
+            //stubXmlService.Usernames = new List<string>() { "test1", "test2" };
 
             var mockAccountManager = new AccountManager(stubXmlService);
             var result = mockAccountManager.GetUsernames();
