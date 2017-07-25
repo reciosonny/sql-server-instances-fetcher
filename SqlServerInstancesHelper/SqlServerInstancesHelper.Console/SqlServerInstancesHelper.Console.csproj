@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{55FACFF2-5484-4870-B164-F2194FCC49D2}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>SqlServerInstancesHelper.Console</RootNamespace>
+    <RootNamespace>SqlServerInstancesHelper.ConsoleApp</RootNamespace>
     <AssemblyName>SqlServerInstancesHelper.Console</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SqlServerInstancesHelper\SqlServerInstancesHelper.csproj">

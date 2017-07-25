@@ -3,22 +3,33 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml;
+using System.Xml.Linq;
 
-namespace SqlServerInstancesHelper.Console {
+namespace SqlServerInstancesHelper.ConsoleApp {
     class Program {
         static void Main(string[] args) {
 
-            var fileService = new FileService();
-            var filepath = fileService.CreateFile("accounts.xml");
-            System.Console.WriteLine("====Created file====");
-            System.Console.WriteLine(filepath);
+            //var fileService = new FileService();
+            //var filepath = fileService.CreateFile("accounts.xml");
+            //Console.WriteLine("====Created file====");
+            //Console.WriteLine(filepath);
 
-            System.Console.WriteLine("====File saved====");
-            System.Console.WriteLine(fileService.GetFile("accounts.xml"));
+            //Console.WriteLine("====File saved====");
+            //Console.WriteLine(fileService.GetFile("accounts.xml"));
 
-            fileService.DeleteFile("accounts.xml");
+            //fileService.DeleteFile("accounts.xml");
 
-            System.Console.ReadLine();
+            //Console.ReadLine();
+
+
+            var doc = new XDocument(new XElement("FileDetails",
+                new XElement("names", "myname"),
+                new XElement("version", "v2")
+            ));
+            Console.WriteLine("testing testing...");
+
+            doc.Save("Sample.xml");
         }
     }
 }
