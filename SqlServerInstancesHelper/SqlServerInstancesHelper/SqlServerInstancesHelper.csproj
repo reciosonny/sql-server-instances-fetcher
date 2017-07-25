@@ -56,6 +56,7 @@
     <Compile Include="Services\IFileService.cs" />
     <Compile Include="Services\IXmlService.cs" />
     <Compile Include="Services\FakeXmlService.cs" />
+    <Compile Include="Services\XmlService.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -10,104 +10,133 @@ using System.Text;
 namespace SqlServerInstancesHelper.Tests.AccountManagerTests {
     public class XmlServiceTests {
 
+
+
         [Test]
-        public void GetUsernames_Should_FetchNamesFromXmlFile() {
-            var mockXmlService = new FakeXmlService();
-            mockXmlService.Usernames = new List<string>() { "test1", "test2" };
+        public void CreateXmlFile_Should_CreateXmlFile() {
+            //Arrange
+            var stubFileService = Substitute.For<IFileService>();
+            var mockXmlService = new XmlService(stubFileService);
 
-            List<string> result = mockXmlService.GetUsernames();
+            //Act
+            stubFileService.CheckFile(Arg.Any<string>()).Returns(true);
+            bool result = mockXmlService.CreateXmlFile("TableName");
 
-            Assert.AreEqual("test1", result[0]);
+            //Assert
+            Assert.True(result);
         }
 
-        [Test]
-        public void CheckXmlFile_Should_CheckIfFileExists() {
-            var stubXmlService = new FakeXmlService();
-            stubXmlService.ExistingXmlFile = "myXmlFile.xml";
 
-            bool result = stubXmlService.CheckXmlFile("myXmlFile.xml");
+        [Test]
+        public void AddNodeElement_Should_AddXmlNodeToExistingXmlFile() {
+            var stubFileService = Substitute.For<IFileService>();
+            var mockXmlService = new XmlService(stubFileService);
+
+            mockXmlService.TEST_MODE = true;
+            mockXmlService.StubCheckNodeColumn = true;
+
+            bool result = mockXmlService.AddNodeElement("nodeColumn", "nodeValue");
 
             Assert.True(result);
         }
 
-        [Test]
-        public void LoadXmlFile_WhenCalled_CallsTheGetFileService() {
-            //ARRANGE
-            IFileService stubFileService = Substitute.For<IFileService>();
-            var mockXmlService = new FakeXmlService(stubFileService);
 
-            stubFileService.CheckFile(Arg.Any<string>()).Returns(true);
-            stubFileService.GetFile(Arg.Any<string>()).Returns("accounts.xml");
+        //[Test]
+        //public void GetUsernames_Should_FetchNamesFromXmlFile() {
+        //    var mockXmlService = new FakeXmlService();
+        //    mockXmlService.Usernames = new List<string>() { "test1", "test2" };
 
-            //ACT
-            mockXmlService.LoadXmlFile();
+        //    List<string> result = mockXmlService.GetUsernames();
 
-            //ASSERT
-            stubFileService.Received().GetFile(Arg.Any<string>());
-        }
+        //    Assert.AreEqual("test1", result[0]);
+        //}
 
-        [Test]
-        public void LoadXmlFile_WhenCalled_ReturnsTheFilename() {
-            //ARRANGE
-            IFileService stubFileService = Substitute.For<IFileService>();
-            var mockXmlService = new FakeXmlService(stubFileService);
-            stubFileService.CheckFile(Arg.Any<string>()).Returns(true);
+        //[Test]
+        //public void CheckXmlFile_Should_CheckIfFileExists() {
+        //    var stubXmlService = new FakeXmlService();
+        //    stubXmlService.ExistingXmlFile = "myXmlFile.xml";
 
-            stubFileService.GetFile(Arg.Any<string>()).Returns("accounts.xml");
+        //    bool result = stubXmlService.CheckXmlFile("myXmlFile.xml");
 
-            //ACT
-            mockXmlService.LoadXmlFile();
+        //    Assert.True(result);
+        //}
 
-            //ASSERT
-            Assert.AreEqual("accounts.xml", mockXmlService.ExistingXmlFile);
-        }
+        //[Test]
+        //public void LoadXmlFile_WhenCalled_CallsTheGetFileService() {
+        //    //ARRANGE
+        //    IFileService stubFileService = Substitute.For<IFileService>();
+        //    var mockXmlService = new FakeXmlService(stubFileService);
 
-        [Test]
-        public void LoadXmlFile_IfFileDoesNotExist_ShouldCreateXmlFileAndReturnFilename() {
-            //ARRANGE
-            IFileService stubFileService = Substitute.For<IFileService>();
-            var mockXmlService = new FakeXmlService(stubFileService);
+        //    stubFileService.CheckFile(Arg.Any<string>()).Returns(true);
+        //    stubFileService.GetFile(Arg.Any<string>()).Returns("accounts.xml");
 
-            stubFileService.CreateFile(Arg.Any<string>()).Returns("accounts.xml");
+        //    //ACT
+        //    mockXmlService.LoadXmlFile();
 
-            //ACT
-            mockXmlService.LoadXmlFile();
+        //    //ASSERT
+        //    stubFileService.Received().GetFile(Arg.Any<string>());
+        //}
 
-            //ASSERT
-            Assert.AreEqual("accounts.xml", mockXmlService.ExistingXmlFile);
+        //[Test]
+        //public void LoadXmlFile_WhenCalled_ReturnsTheFilename() {
+        //    //ARRANGE
+        //    IFileService stubFileService = Substitute.For<IFileService>();
+        //    var mockXmlService = new FakeXmlService(stubFileService);
+        //    stubFileService.CheckFile(Arg.Any<string>()).Returns(true);
 
-        }
+        //    stubFileService.GetFile(Arg.Any<string>()).Returns("accounts.xml");
 
-        [Test]
-        public void LoadXmlFile_IfFileIsUsed_ShouldThrowIOException() {
-            //ARRANGE
-            IFileService stubFileService = Substitute.For<IFileService>();
-            var mockXmlService = new FakeXmlService(stubFileService);
-            stubFileService.CheckFile(Arg.Any<string>()).Returns(true);
-            //stubFileService.GetFile(Arg.Any<string>()).Returns("accounts.xml");
-            stubFileService.GetFile(Arg.Any<string>()).Returns(x => throw new IOException());
+        //    //ACT
+        //    mockXmlService.LoadXmlFile();
+
+        //    //ASSERT
+        //    Assert.AreEqual("accounts.xml", mockXmlService.ExistingXmlFile);
+        //}
+
+        //[Test]
+        //public void LoadXmlFile_IfFileDoesNotExist_ShouldCreateXmlFileAndReturnFilename() {
+        //    //ARRANGE
+        //    IFileService stubFileService = Substitute.For<IFileService>();
+        //    var mockXmlService = new FakeXmlService(stubFileService);
+
+        //    stubFileService.CreateFile(Arg.Any<string>()).Returns("accounts.xml");
+
+        //    //ACT
+        //    mockXmlService.LoadXmlFile();
+
+        //    //ASSERT
+        //    Assert.AreEqual("accounts.xml", mockXmlService.ExistingXmlFile);
+
+        //}
+
+        //[Test]
+        //public void LoadXmlFile_IfFileIsUsed_ShouldThrowIOException() {
+        //    //ARRANGE
+        //    IFileService stubFileService = Substitute.For<IFileService>();
+        //    var mockXmlService = new FakeXmlService(stubFileService);
+        //    stubFileService.CheckFile(Arg.Any<string>()).Returns(true);
+        //    //stubFileService.GetFile(Arg.Any<string>()).Returns("accounts.xml");
+        //    stubFileService.GetFile(Arg.Any<string>()).Returns(x => throw new IOException());
 
 
-            //ACT
-            var ex = Assert.Throws<IOException>(() => mockXmlService.LoadXmlFile());
+        //    //ACT
+        //    var ex = Assert.Throws<IOException>(() => mockXmlService.LoadXmlFile());
 
-            //ASSERT
-            //Assert.AreEqual("accounts.xml", mockXmlService.ExistingXmlFile);
-            Assert.AreEqual("file is being used", ex.Message);
-        }
+        //    //ASSERT
+        //    //Assert.AreEqual("accounts.xml", mockXmlService.ExistingXmlFile);
+        //    Assert.AreEqual("file is being used", ex.Message);
+        //}
 
+        //[Test]
+        //public void GetStringLists_Should_GetListOfStrings() {
 
-
-        [Test]
-        public void GetStringLists_Should_GetListOfStrings() {
-
-            IXmlService stubXmlService = Substitute.For<IXmlService>();
-            stubXmlService.GetStringLists(Arg.Any<string>()).Returns(new List<string>() { "test1", "test2" });
+        //    IXmlService stubXmlService = Substitute.For<IXmlService>();
+        //    stubXmlService.GetStringLists(Arg.Any<string>()).Returns(new List<string>() { "test1", "test2" });
 
 
-            string result = stubXmlService.GetStringLists(Arg.Any<string>())[0];
-            Assert.AreEqual("test1", result);
-        }
+        //    string result = stubXmlService.GetStringLists(Arg.Any<string>())[0];
+        //    Assert.AreEqual("test1", result);
+        //}
 
 
     }

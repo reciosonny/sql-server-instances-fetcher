@@ -23,6 +23,7 @@ namespace SqlServerInstancesHelper.ConsoleApp {
             //Console.ReadLine();
 
 
+            //Creates xml document
             var doc = new XDocument(new XElement("FileDetails",
                 new XElement("names", "myname"),
                 new XElement("version", "v2")
@@ -30,6 +31,28 @@ namespace SqlServerInstancesHelper.ConsoleApp {
             Console.WriteLine("testing testing...");
 
             doc.Save("Sample.xml");
+
+            var loadXml = XElement.Load("Sample.xml");
+            XNamespace df = loadXml.Name.Namespace;
+            Console.WriteLine((string)loadXml.Element(df + "version"));
+
+
+            //loads XML file and add another node
+            var loadDocXml = XDocument.Load("Sample.xml");
+            loadDocXml.Element("FileDetails").Add(new XElement("test", "test2"));
+            loadDocXml.Save("Sample.xml");
+
+
+
+            //checks whether XML Element exists.
+            bool exists = loadDocXml.Elements("FileDetails").Elements("test").Any();
+
+            Console.WriteLine("is exists: " + exists);
+
+
+            var xmlService = new XmlService();
+            Console.WriteLine(xmlService.AddNodeElement("mynode", "mynodevalue"));
+
         }
     }
 }

@@ -14,10 +14,19 @@ namespace SqlServerInstancesHelper.Services {
         private const string FILENAME = "accounts.xml";
         private const string MEM_ADDR = "000FEEA111";
 
-        private IFileService stubFileService;
-        public FakeXmlService(IFileService stubFileService) {
-            this.stubFileService = stubFileService;
+        private IFileService fileService;
+        public FakeXmlService(IFileService fileService) {
+            this.fileService = fileService;
         }
+
+        public bool CreateXmlFile(string v) {
+            throw new NotImplementedException();
+        }
+
+        public bool AddNodeElement(string v1, string v2) {
+            throw new NotImplementedException();
+        }
+
         public FakeXmlService() {
 
         }
@@ -37,11 +46,11 @@ namespace SqlServerInstancesHelper.Services {
         public void LoadXmlFile() {
 
             try {
-                if (!stubFileService.CheckFile(FILENAME)) {
-                    ExistingXmlFile = stubFileService.CreateFile(FILENAME);
+                if (!fileService.CheckFile(FILENAME)) {
+                    ExistingXmlFile = fileService.CreateFile(FILENAME);
                 } else {
                     //TODO: create a test that throws IOException errors and create ways to address it.
-                    ExistingXmlFile = stubFileService.GetFile(FILENAME);
+                    ExistingXmlFile = fileService.GetFile(FILENAME);
                 }
             } catch (IOException ex) {
                 throw new IOException("file is being used");
